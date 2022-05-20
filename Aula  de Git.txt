@@ -1,0 +1,194 @@
+ Aula de Git:
+ O que é  git?
+ Ele é um software de versionamento de código, que nos ajuda a criar e a monitorar diferentes versões do nosso código dentro da nossa máquina.
+
+ "Comandos importantes":
+
+ Listar diretórios(Entender em qual local estamos:
+ Dentro do windows(cmd) o comando para listar se chama dir 
+ Explicação :Dentro de C / "Usuario" Tem todas as pastas exibidas
+ 
+ Navegar entre as pastas :
+ O comando para navegar se chama cd 
+ Ao digitar cd / vamos para dentro da base do diretorio c
+
+
+ Para retroceder um nivel :
+ Digite cd ..
+ Votara a pasta anterior
+
+ Para limpar o terminal :
+ Digite cls
+ 
+ Um atalho muito  importate é a tecla Tab:
+ TAb tem a função de autocomplete
+
+ Para criação de uma pasta:
+ Digite o comando mkdir + o nome da pasta que deseja criar 
+ 
+ Comando echo retorna o que foi digitado(mostra na tela)
+
+ Para criação de arquivo :
+ Digite echo dentro da pasta que deseja criar o arquivo ,seguido do nome do arquivo ,sinal de maior seguido do nome do arquivo
+ 
+ Exemplo:
+ echo hello > hello.txt
+
+ Para deletar todos os arquivos contidos dentro da pasta:
+ del seguido nome da pasta
+
+ Para estar excluindo toda pasta :
+ Retorne a pasta cd e depois digite
+ rm -rf + nome da pasta 
+
+ Caso queira deletar uma pasta contida dentro de outra :
+ entre na pasta e digite :
+ rm -rf + nome da pasta 
+
+
+"Entendendo como git funciona por debaixo dos panos"
+ 
+  4 topicos da aula:
+ -SHA1
+ -Objetos fundamentais
+ -Sistemas distribuidos
+ -Segurança
+
+
+ 
+ O que é SHA1 ?
+ Conjunto de funções hash criptografias projetadas pela nasa, ele é um algoritmo que vai pegar seu arquivo e vai embaralhar ele de uma forma muito especifica.
+ 
+ Mais por que isso é importante ?
+ Por que a saida dessa incriptação, a saida desses dados incriiptados gera um conjunto de caracteres que são unicos, esses caracteres contem 40 digitos. Eles servem como indentificação . Por exemplo que temos um arquivi de texto muito grande,e você vai nesse arquivo de texto e roda esse algortimo ele vai gerar conjunto de caracteres de 40 digitos, se for nesse arquivo novamente e modificar uma virgula ,e rodar esse arquivo novamente ele vai gerar um novo identificador. Caso voltmos no mesmo arquivo e inserimos a virgula no mesmo lugar de antes ele vai gerar o identificador anterior. Dessa forma é muito seguro identificar esses arquivos.
+
+ Exemplo para entender como sha1 trabalha:
+ Botão direito selecione a opção bash here(Para cair dentro da pasta correta)
+
+ Vamos passar esse arquivo para algoritmo de incriptação:
+  Digite openssl sha1 + nome do arquivo(texto.txt)
+   
+   "Objetos internos do Git"
+    
+     -Blobs
+     -Trees
+     -Commits
+   
+    1º Objeto-Blobs:
+   A forma como o Git lida com arquivos são atraves de objetos , e os arquivos  ficam guardados dentro do objeto Blob, esse objeto contem metadados dentro dele ,entao o objeto blobs ele vai ter o tipo do objeto, o tamanho do arquivo,uma barra contraria com 0 (\0) e o conteudo de fato desse arquivo. Essa é uma estrutura base de um blob.
+ 
+  Utilizando o comando hash ele vai mostrar o sha1 do arquivo:
+ 
+ echo 'conteudo' |git hash-object  --stdin
+
+ Passando usando blob
+ 
+ echo -e 'blob 9\0 conteudo' | openssl sha1
+
+ Resumindo o git ele vai guardar esses dados fazendo um sha1 deles,mais também armazena metadados nesses objetos, entao o git ele contem metados que são o tipo do objeto , tamanho e o conteudo do arquivo.
+
+  2ºObjeto - Tree(Arvores):
+  As trees armazenão os blobs,então as arvores(tree) contem também metadados que são o blobs, sha1 e nome do arquivo.
+As arvores podem apontar tanto para os blobs(arquivos) como para outras arvores.
+
+  3ºObjeto - Commits:
+  O commit é objeto que vai juntar tudo, é objeto que vai dar sentido para toda alteração que você esta fazendo, então commit aponta para uma arvore,aponta para um parente(ultimo commit realizado), autor e mensagem.
+
+Vale ressaltar  que para cada commit, tree(arvore) ou blob é gerado um sha1 unico , e quando modificado um reflete nos demais, por isso git é tão seguro.
+
+Por que git é um sistema distribuido?
+ Pois todas as versões distrbuidas em maquinas são confiaveis , e seria quase impossivel modificar um commit.
+
+ "Chaves SSH e Tokens"
+
+  Chave SSH - é uma maneira de estabelecer uma conexão segura e incriptografada entre duas maquinas,fazendo uma conexão entre o git hub e o servidor.Assim vamos ter duas formas de autentificação.
+  
+1- Primeiro gera a chave:
+  Comandos necessarios para gerar uma chave SSH:
+
+  ssh-keygen -t ed25519 -C + email usado no github
+                  ^^
+                  Tipo de criptografia da chave
+
+  Comando para vizualizar conteudo da chave:
+ 
+  cat id_ed25519.pub  (lembrando que chave que usaremos dentro do github é sempre a publica)
+
+2- Adiciona a chave ao github(Página)
+
+3-Retorna ao Bash here para configurar a inicialização para utilizar as chaves:
+
+ Comando para sabermos o caminho completo onde estamos:
+ pwd
+
+ Comando responsavel por inicializar elas e pegar para utilização:
+  1- eval $(ssh-agent -s) 
+  
+  2- precisamos passar o caminho onde esta a chave ssh:
+  ssh-add id_ed25519(aqui utilizamos sempre a chave privada)
+
+Agora quando for clonar um repositorio via ssh  utilizaremos o comando:
+ git clone + codigo copiado
+
+
+  "Iniciando git e criando commit"
+
+ Criando repositorio:
+  Dentro da pasta vamos rodar o git , utilizando o comando do git (git init) para que de fato o git possa inicializar e gerenciar nosso codigo:
+   dentro da pasta criada digite git init
+
+ Para verificar se tem pasta ocultas(pastas que tem . antes do nome)utilizamos a flag -a(ls -a)
+
+ Criando o primeiro arquivo dentro da pasta , mais precisamos configurar antes pois é a primeira vez criando um arquivo no git
+git config --global user.email "email" + enter
+ git config --global user.name + "name"
+
+ Agora adicionando um arquivo:
+
+Apos criar o arquivo vsamor adicionar ,utiliza git add *
+
+Em seguida git commit -m "mensagem"
+
+
+Comando para ver o status de arquivo:
+git status
+
+ Comando mover arquivo:
+mv  + arquivo que deseja mover ./receitas(pasta que deseja mover o arquivo)
+
+ Comando para saber todas as configurações ja realizadas:
+ git  config --list
+
+ Caso seja necessario realizar alguma alteração nas configurções:
+ git config --global --unset user.email
+
+ git config --global --unset user.name
+
+ Precisamos apontar todas as alterações da nossa maquina local para nossa maquina remota(github),assim precisamos adicionar a origem que desejamos aponntar (url copiado do repositorio criado):
+ git remote add origin + link
+
+ Para listar todos os remotes cadastrado :
+ git remote -v
+
+ Agora para empurrar nosso codigo da maquina local para nossa maquina remota:
+ git push origin master
+
+ ***Pode acontecer de duas pessoas estarem trabalhando em um mesmo arquivo ,e ao tenytar empurrar(push) para maquina remota ocorra um erro ,e no caso sera necessario puxar  as alterações para dentro da maquina local ,onde utilizaremos o comando pull(puxar):
+ git pull origin master
+
+ Para clonar um repositorio via http :
+ Abra bash here 
+ Digite git clone + link
+
+
+
+
+
+
+
+
+
+
+
+ 
+
